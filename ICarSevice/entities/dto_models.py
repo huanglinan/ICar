@@ -18,8 +18,8 @@ class BrandDTO(BaseAudit):
         orm_mode = True
 
 
-class BrandRequestDTO(BaseAudit):
-    parameter: BrandDTO = Field(...)
+# class BrandRequestDTO(BaseAudit):
+#     parameter: BrandDTO = Field(...)
 
 
 class CarDTO(BaseAudit):
@@ -28,8 +28,8 @@ class CarDTO(BaseAudit):
         orm_mode = True
 
 
-class CarRequestDTO(BaseAudit):
-    parameter: CarDTO = Field(...)
+# class CarRequestDTO(BaseAudit):
+#     parameter: CarDTO = Field(...)
 
 
 class ResponseDTO(BaseModel):

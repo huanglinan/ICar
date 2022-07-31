@@ -10,12 +10,10 @@ from fastapi import APIRouter, Depends
 
 
 PATH = "brands"
-BASE_PATH = "/{BASE_URL}/{VERSION}/{PATH}"
-
-controller = APIRouter()
+controller = APIRouter(prefix=f"/{BASE_URL}/{VERSION}/{PATH}", tags=[PATH])
 
 
-@controller.get(BASE_PATH, response_model=ResponseDTO)
+@controller.get("", response_model=ResponseDTO)
 async def get_brands(db: Session = Depends(get_db)):
     brands = brand_service.get_brands(db)
     if(brands is not None):
@@ -23,7 +21,7 @@ async def get_brands(db: Session = Depends(get_db)):
     return send_notfound_resp()
 
 
-@controller.get("{BASE_PATH}/{id}", response_model=ResponseDTO)
+@controller.get("/{id}", response_model=ResponseDTO)
 async def get_brand_by_id(id: UUID, db: Session = Depends(get_db) ):
     selectedBrand: Brand = brand_service.get_brand_by_id(db, id)
     if selectedBrand is not None:
@@ -31,16 +29,18 @@ async def get_brand_by_id(id: UUID, db: Session = Depends(get_db) ):
     return send_notfound_resp()
 
 
-@controller.post(BASE_PATH, response_model=ResponseDTO)
+@controller.post("", response_model=ResponseDTO)
 async def create_brand( new_brand: BrandDTO,db: Session = Depends(get_db)):
     try:
-       brand_service.create_brand(db, new_brand)
+       brand = brand_service.create_brand(db, new_brand)
+       if brand is None:
+           return send_error_resp(400, "Bad Request", "Failed to create resource") 
     except Exception:
-        return send_error_resp(400, "Bad Request", "Resource is failed to create")
+        return send_error_resp(400, "Bad Request", "Failed to create resource") 
     return send_succes_resp(None)
 
 
-@controller.delete("{BASE_PATH}/{id}", response_model=ResponseDTO)
+@controller.delete("/{id}", response_model=ResponseDTO)
 async def delete_brand( id: UUID, db: Session = Depends(get_db)):
     selectedBrand: Brand = brand_service.get_brand_by_id(db, id)
     if selectedBrand is not None:
@@ -49,8 +49,8 @@ async def delete_brand( id: UUID, db: Session = Depends(get_db)):
     return send_notfound_resp()
 
 
-@controller.put("{BASE_PATH}/{id}", response_model=ResponseDTO)
-async def update_brand( updateData: BrandDTO, id: UUID,db: Session = Depends(get_db)):
+@controller.put("/{id}", response_model=ResponseDTO)
+async def update_brand(updateData: BrandDTO, id: UUID,db: Session = Depends(get_db)):
     selectedBrand: Brand = brand_service.get_brand_by_id(db, id)
     if selectedBrand is not None:
         if updateData.name is not None:

@@ -1,10 +1,9 @@
-
 from sqlalchemy.orm import Session
 from uuid import UUID
 from datetime import datetime
 import logging
-from ICarSevice.entities.dto_models import CarDTO
-from ICarSevice.entities.models import Car
+from entities.dto_models import CarDTO
+from entities.models import Car
 
 
 # Get All cards
@@ -38,7 +37,6 @@ def create_car(db: Session, carDTO: CarDTO):
         )
         db.add(new_car)
         db.commit()
-        db.refresh()
         return new_car
     except Exception as e:
         logging.error('Error: ', e)

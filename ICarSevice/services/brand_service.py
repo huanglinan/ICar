@@ -37,7 +37,6 @@ def create_brand(db: Session, brandDTO: BrandDTO):
         )
         db.add(new_brand)
         db.commit()
-        db.refresh()
         return new_brand
     except Exception as e:
         logging.error('Error: ', e)
