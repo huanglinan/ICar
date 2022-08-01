@@ -25,6 +25,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzTableModule } from 'ng-zorro-antd/table';
 registerLocaleData(en);
 
 @NgModule({
@@ -53,6 +54,7 @@ registerLocaleData(en);
     ReactiveFormsModule,
     NzMessageModule,
     NzModalModule,
+    NzTableModule,
 
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],

@@ -30,7 +30,7 @@ def create_car(db: Session, carDTO: CarDTO):
         new_car = Car(
             name=carDTO.name,
             logo=carDTO.logo,
-            desc=carDTO.logo,
+            desc=carDTO.desc,
             brand_id=carDTO.brand_id,
             createDate=datetime.now(),
             updateDate=datetime.now()

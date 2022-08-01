@@ -6,14 +6,14 @@ from pydantic import BaseModel, Field
 
 class BaseAudit(BaseModel):
     id: Optional[UUID]
-    name: Optional[str] = None
-    logo: Optional[str] = None
+    name: Optional[str] = None    
     desc: Optional[str] = None
     createDate: Optional[datetime] = None
     updateDate: Optional[datetime] = None
 
 
 class BrandDTO(BaseAudit):
+    logo: Optional[UUID] = None
     class Config:
         orm_mode = True
 
@@ -23,6 +23,7 @@ class BrandDTO(BaseAudit):
 
 
 class CarDTO(BaseAudit):
+    logo: Optional[UUID] = None
     brand_id: Optional[UUID]
     class Config:
         orm_mode = True
@@ -37,3 +38,9 @@ class ResponseDTO(BaseModel):
     status: str
     message: str
     data: Optional[object]
+
+
+class LogoDTO(BaseAudit):
+    file: str
+    class Config:
+        orm_mode = True

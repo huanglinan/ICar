@@ -36,9 +36,9 @@ async def create_car(new_car: CarDTO, db: SessionLocal = Depends(get_db)):
     try:
         car = car_service.create_car(db, new_car)
         if car is None:
-            return send_error_resp(400, "Bad Request", "Failed to create resource")
+            return send_error_resp(400, "Failed to create resource")
     except Exception:
-        return send_error_resp(400, "Bad Request", "Failed to create resource")
+        return send_error_resp(400, "Failed to create resource")
     return send_succes_resp(None)
 
 

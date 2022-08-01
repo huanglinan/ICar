@@ -31,7 +31,7 @@ def create_brand(db: Session, brandDTO: BrandDTO):
         new_brand = Brand(
             name=brandDTO.name,
             logo=brandDTO.logo,
-            desc=brandDTO.logo,
+            desc=brandDTO.desc,
             createDate=datetime.now(),
             updateDate=datetime.now()
         )

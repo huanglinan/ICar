@@ -1,50 +1,9 @@
-<!-- <nz-input-group [nzSize]="'large'">
-    <div nz-row [nzGutter]="8">
-        <div nz-col [nzSpan]="3">
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="website">Website</nz-form-label>
-        </div>
-       
-        <div nz-col [nzSpan]="3">
-            <nz-select ngModel="lucy">
-                <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
-                <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
-                <nz-option nzValue="disabled" nzLabel="Disabled" nzDisabled></nz-option>
-            </nz-select>
-        </div>
-        <div nz-col [nzSpan]="3">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="input search text" />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-                <i nz-icon nzType="search"></i>
-            </ng-template>
-        </div>
-    </div>
-<table>
-    <tbody>
-        <tr>
-            <th>Logo</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Created Date</th>
-         <th>Updated Date</th> 
-        </tr>
-        <tr *ngFor="let item of brands">
-            <td>{{item.logo}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.desc}}</td>
-            <td>{{item.createDate | date:'dd/MM/yyyy HH:mm:ss'}}</td>
-      <td>{{item.updateDate | date:'dd/MM/yyyy HH:mm:ss'}}</td> 
-        </tr>
-    </tbody>
-</table>
-</nz-input-group> -->
-<form nz-form>
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item>
         <nz-form-label [nzSpan]="6" nzFor="logo">Logo</nz-form-label>
         <nz-form-control [nzSpan]="14">
             <div class="clearfix">
-                <nz-upload nzListType="picture-card"
+                <nz-upload nzAction="http://127.0.0.1:8000/api/v1/brands/upload" nzListType="picture-card"
                     [(nzFileList)]="fileList" [nzShowButton]="fileList.length < 1" [nzPreview]="handlePreview">
                     <div>
                         <i nz-icon nzType="plus"></i>
@@ -61,28 +20,59 @@
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="name">Name</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <input nz-input name="name" type="text" id="name" [(ngModel)]="newBrand.name">
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+            <span>name</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your name!">
+            <input nz-input id="name" formControlName="name" />
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="name">Name</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzFor="name">Status</nz-form-label>
         <nz-form-control [nzSpan]="14">
-            <nz-select ngModel="lucy">
+            <nz-select>
                 <nz-option nzValue="0" nzLabel="Active"></nz-option>
                 <nz-option nzValue="1" nzLabel="Inactive"></nz-option>
-              </nz-select>
+            </nz-select>
         </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
         <nz-form-label [nzSpan]="6" nzFor="desc">Description</nz-form-label>
         <nz-form-control [nzSpan]="14">
-            <textarea rows="4" nz-input [(ngModel)]="newBrand.desc"></textarea>
+            <textarea rows="4" formControlName="desc" nz-input></textarea>
         </nz-form-control>
     </nz-form-item>
 
-    <input nz-input name="name" type="text" id="name" [(ngModel)]="newBrand.name">
     <button nz-button nzType="default" (click)="onClick()">Button1</button>
+    <button nz-button nzType="primary" type="submit" [nzLoading]="false">Button1</button>
 </form>
+
+
+<nz-table #basicTable [nzData]="brands">
+    <thead>
+        <tr>
+            <th>logo</th>
+            <th>name</th>
+            <th>desc</th>
+            <th>updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of basicTable.data">
+            <td>
+            <img nz-image width="200px" height="200px"
+                [src]="data.logo"
+                alt="" />
+            </td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.desc }}</td>
+            <td>{{ data.updated }}</td>
+            <!-- <td>
+          <a>Action 一 {{ data.name }}</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a>Delete</a>
+        </td> -->
+        </tr>
+    </tbody>
+</nz-table>

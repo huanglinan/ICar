@@ -1,8 +1,10 @@
+from fastapi import HTTPException
 from db_config import SessionLocal
 from entities.dto_models import ResponseDTO
 
 BASE_URL = "api"
 VERSION = "v1"
+
 
 def get_db():
     db = SessionLocal()
@@ -13,21 +15,11 @@ def get_db():
 
 
 def send_notfound_resp():
-    return ResponseDTO(
-        code=404,
-        status="NOT FOUND",
-        message="Resource not found",
-        data=None
-    ).dict(exclude_none=True)
+    raise HTTPException(status_code=404, detail="Resource not found")
 
 
-def send_error_resp(_code: int, _status: str, _msg: str):
-    return ResponseDTO(
-        code=_code,
-        status=_status,
-        message=_msg,
-        data=None
-    ).dict(exclude_none=True)
+def send_error_resp(_code: int, _msg: str):
+    raise HTTPException(status_code=_code, detail=_msg)
 
 
 def send_succes_resp(data: object):
@@ -36,4 +28,4 @@ def send_succes_resp(data: object):
         status="OK",
         message="success",
         data=data
-    ).dict(exclude_none=True)
+    )
