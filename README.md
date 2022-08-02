@@ -10,6 +10,7 @@ pip install fastapi uvicorn sqlalchemy sqlalchemy_utils psycopg2 python-dotenv
 ```
 - run the local server with localhost:8080
 ```bash
+cd /ICarService
 uvicorn main:app
 ```
 
@@ -20,6 +21,7 @@ npm install -g @angular/cli@11.2.19
 ```
 - then install pakages 
 ```bash
+cd /ICarApp
 npm i
 ```
 
