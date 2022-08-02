@@ -1,11 +1,19 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import database_exists, create_database
+from dotenv import load_dotenv
 
-db_name = 'db_icar'
+load_dotenv()
 
-DATABASE_URL = "postgresql://postgres:Qwerty!23456@localhost:5432/db_icar"
+DB_USER = os.environ.get("DB_USER")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_NAME = os.environ.get("DB_NAME")
+DB_ADRESS = os.environ.get("DB_ADRESS")
+
+DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_ADRESS}/{DB_NAME}"
+print(DATABASE_URL)
 
 engine = create_engine(DATABASE_URL)
 if not database_exists(engine.url):
