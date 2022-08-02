@@ -29,3 +29,13 @@ npm s
 ```
 
 
+for PostgreSQL you might like to change user/password to conenct the DB server to do this go to
+- open ICarSevice/.env
+
+and change those config
+```bash
+DB_USER = postgres
+DB_PASSWORD = postgres
+DB_NAME = db_icar
+DB_ADRESS = localhost
+```
