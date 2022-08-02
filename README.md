@@ -31,7 +31,7 @@ npm s
 ```
 
 
-for PostgreSQL you might like to change user/password to conenct the DB server to do this go to
+for PostgreSQL you might like to change some env properties to connect your PostgresSQL Server to do so go to
 - open ICarSevice/.env
 
 and change those config
