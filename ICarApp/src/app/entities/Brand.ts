@@ -5,5 +5,6 @@ export class Brand{
     createDate:string;
     updateDate:string;
     id:string;
+    is_active:boolean
 
 }

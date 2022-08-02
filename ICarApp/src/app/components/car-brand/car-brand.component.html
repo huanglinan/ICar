@@ -1,78 +1,104 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="logo">Logo</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <div class="clearfix">
-                <nz-upload nzAction="http://127.0.0.1:8000/api/v1/brands/upload" nzListType="picture-card"
-                    [(nzFileList)]="fileList" [nzShowButton]="fileList.length < 1" [nzPreview]="handlePreview">
-                    <div>
-                        <i nz-icon nzType="plus"></i>
-                        <div style="margin-top: 8px">Upload</div>
-                    </div>
-                </nz-upload>
-                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
-                    (nzOnCancel)="previewVisible = false">
-                    <ng-template #modalContent>
-                        <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
-                    </ng-template>
-                </nz-modal>
-            </div>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
-            <span>name</span>
-        </nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your name!">
-            <input nz-input id="name" formControlName="name" />
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="name">Status</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <nz-select>
-                <nz-option nzValue="0" nzLabel="Active"></nz-option>
-                <nz-option nzValue="1" nzLabel="Inactive"></nz-option>
-            </nz-select>
-        </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="desc">Description</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <textarea rows="4" formControlName="desc" nz-input></textarea>
-        </nz-form-control>
-    </nz-form-item>
-
-    <button nz-button nzType="default" (click)="onClick()">Button1</button>
-    <button nz-button nzType="primary" type="submit" [nzLoading]="false">Button1</button>
-</form>
-
-
-<nz-table #basicTable [nzData]="brands">
+<div nz-row>
+    <div nz-col nzSpan="20">
+        <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="input search text" [(ngModel)]="searchText" (change)="searchData()" />
+        </nz-input-group>
+    </div>
+    <div nz-col nzSpan="4" class="center">
+        <button nz-button nzType="primary" type="button" (click)="openModal()">Add new Brand</button>
+    </div>
+</div>
+<ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
+</ng-template>
+<nz-table #basicTable nzTableLayout="fixed" [nzData]="brands">
     <thead>
         <tr>
-            <th>logo</th>
-            <th>name</th>
-            <th>desc</th>
-            <th>updated</th>
+            <th nzWidth="120px">Logo</th>
+            <th nzEllipsis nzWidth="500px">Brand</th>
+            <th nzWidth="100px">Status</th>
+            <th nzWidth="200px">Updated</th>
+            <th nzWidth="100%">Action</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let data of basicTable.data">
             <td>
-            <img nz-image width="200px" height="200px"
-                [src]="data.logo"
-                alt="" />
+                <img nz-image width="100px" height="100px" [src]="data.logo" alt="" />
             </td>
-            <td>{{ data.name }}</td>
-            <td>{{ data.desc }}</td>
-            <td>{{ data.updated }}</td>
-            <!-- <td>
-          <a>Action 一 {{ data.name }}</a>
-          <nz-divider nzType="vertical"></nz-divider>
-          <a>Delete</a>
-        </td> -->
+            <td nzEllipsis>{{ data.name }}<br /><span style="color: darkgray;"> {{ data.desc }}</span></td>
+            <td>
+                <div *ngIf="data.is_active; then thenBlock else elseBlock"></div>
+                <ng-template #thenBlock>
+                    <nz-tag nzColor="success">
+                        <i nz-icon nzType="check-circle"></i>
+                        <span>Active</span>
+                    </nz-tag>
+                </ng-template>
+                <ng-template #elseBlock>
+                    <nz-tag nzColor="error">
+                        <i nz-icon nzType="close-circle"></i>
+                        <span>Inactive</span>
+                    </nz-tag>
+                </ng-template>
+            </td>
+            <td>{{ data.updateDate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td>
+                <button nz-button nzType="default" (click)="viewDetail(data.id)">View Details</button>
+            </td>
         </tr>
     </tbody>
 </nz-table>
+
+<!-- <nz-modal [(nzVisible)]="isVisibleModal" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"> -->
+<nz-modal [(nzVisible)]="isVisibleModal" nzTitle="Create new Brand" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+    [nzOkLoading]="isOkLoading">
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="logo">Logo</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <div class="clearfix">
+                        <nz-upload nzAction="http://127.0.0.1:8000/api/v1/brands/upload" nzListType="picture-card"
+                            [(nzFileList)]="fileList" [nzShowButton]="fileList.length < 1" [nzPreview]="handlePreview">
+                            <div>
+                                <i nz-icon nzType="plus"></i>
+                                <div style="margin-top: 8px">Upload</div>
+                            </div>
+                        </nz-upload>
+                        <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                            (nzOnCancel)="previewVisible = false">
+                            <ng-template #modalContent>
+                                <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                            </ng-template>
+                        </nz-modal>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+                    <span>name</span>
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your name!">
+                    <input nz-input id="name" formControlName="name" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="name">Status</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <nz-select formControlName="is_active" ngModel="false">
+                        <nz-option nzValue="true" nzLabel="Active"></nz-option>
+                        <nz-option nzValue="false" nzLabel="Inactive"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="desc" nzRequired>Description</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <textarea rows="4" formControlName="desc" nz-input></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-container>
+</nz-modal>

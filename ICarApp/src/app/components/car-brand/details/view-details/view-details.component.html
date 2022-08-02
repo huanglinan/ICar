@@ -1,0 +1,43 @@
+<form nz-form>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="logo">Logo</nz-form-label>
+        <img nz-image width="100px" height="100px" [src]="brand.logo" alt="" />
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+            <span>name</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your name!">
+            <input nz-input id="name" [(value)]="brand.name" [readonly]="true" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="name">Status</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <div *ngIf="brand.is_active; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+                <nz-tag nzColor="success">
+                    <i nz-icon nzType="check-circle"></i>
+                    <span>Active</span>
+                </nz-tag>
+            </ng-template>
+            <ng-template #elseBlock>
+                <nz-tag nzColor="error">
+                    <i nz-icon nzType="close-circle"></i>
+                    <span>Inactive</span>
+                </nz-tag>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="desc" nzRequired>Description</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <textarea rows="4" [(value)]="brand.desc" nz-input [readonly]="true"></textarea>
+        </nz-form-control>
+    </nz-form-item>
+
+    <div class="center">
+        <button nz-button nzType="default" (click)="edit(brand.id)">Edit Infomration</button>
+    </div>
+</form>

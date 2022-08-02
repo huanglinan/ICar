@@ -21,6 +21,14 @@ async def get_brands(db: Session = Depends(get_db)):
     return send_notfound_resp()
 
 
+@controller.get("/search", response_model=ResponseDTO)
+async def search_brands(name: str, db: Session = Depends(get_db)):
+    brands = brand_service.search_brand_by_name(db, name)
+    if(brands is not None):
+        return send_succes_resp(brands)
+    return send_notfound_resp()
+
+
 @controller.get("/{id}", response_model=ResponseDTO)
 async def get_brand_by_id(id: UUID, db: Session = Depends(get_db)):
     selectedBrand: Brand = brand_service.get_brand_by_id(db, id)
@@ -60,12 +68,18 @@ async def update_brand(updateData: BrandDTO, id: UUID, db: Session = Depends(get
         if updateData.logo is not None:
             selectedBrand.logo = updateData.logo
         selectedBrand.updateDate = datetime.now()
+        selectedBrand.is_active = updateData.is_active
+        brand_service.update_brand(db, selectedBrand)
         return send_succes_resp(None)
     return send_notfound_resp()
 
 
 @controller.post("/upload", response_model=ResponseDTO)
 async def upload_file(file: UploadFile, db: Session = Depends(get_db)):
+    print(file.content_type)
+    if not file.content_type.lower().endswith(('/png', '/jpg', '/jpeg')):
+        return send_error_resp(400, "Failed to create resource")
+
     file_location = f"files/{file.filename}"
     with open(file_location, "wb+") as file_object:
         file_object.write(file.file.read())
@@ -83,6 +97,7 @@ async def upload_file(file: UploadFile, db: Session = Depends(get_db)):
     except Exception:
         return send_error_resp(400, "Failed to create resource")
     return send_succes_resp(logo.id)
+
 
 @controller.get("/getFile/{id}")
 async def get_upload_file(id: UUID, db: Session = Depends(get_db)):

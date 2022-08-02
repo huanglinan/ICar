@@ -7,14 +7,28 @@ import { Brand } from '../entities/Brand';
   providedIn: 'root'
 })
 export class BrandsService {
+  putBrand(brand: Brand): Observable<any> {
+    return this.httpClient.put<any>(
+      'http://127.0.0.1:8000/api/v1/brands/' + brand.id,
+      brand
+    )
+  }
+
+  getBrandById(id: string): Observable<any> {
+    return this.httpClient.get<any>('http://127.0.0.1:8000/api/v1/brands/' + id)
+  }
 
   constructor(private httpClient: HttpClient) { }
 
-  getLists(): Observable<any>{
+  getLists(): Observable<any> {
     return this.httpClient.get<any>('http://127.0.0.1:8000/api/v1/brands')
   }
 
-  createBrand(brand: Brand): Observable<any>{
+  searchBrands(name: string): Observable<any> {
+    return this.httpClient.get<any>('http://127.0.0.1:8000/api/v1/brands/search?name=' +name)
+  }
+
+  createBrand(brand: Brand): Observable<any> {
     return this.httpClient.post(
       'http://127.0.0.1:8000/api/v1/brands',
       brand

@@ -26,12 +26,17 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { ViewDetailsComponent } from './components/car-brand/details/view-details/view-details.component';
+import { EditDetailsComponent } from './components/car-brand/details/edit-details/edit-details.component';
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
     AppComponent,
-    CarBrandComponent
+    CarBrandComponent,
+    ViewDetailsComponent,
+    EditDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +45,7 @@ registerLocaleData(en);
     HttpClientModule,
     BrowserAnimationsModule,
     IconsProviderModule,
+    NzTagModule,
     NzLayoutModule,
     NzMenuModule,
     NzBreadCrumbModule,

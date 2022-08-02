@@ -25,13 +25,23 @@ def get_brand_by_id(db: Session, id: UUID):
     return None
 
 
+# Search a Brand
+def search_brand_by_name(db: Session, name: str):
+    try:
+        return db.query(Brand).filter( Brand.name.ilike(f'%{name}%')).all()
+    except Exception as e:
+        logging.error('Error: ', e)
+    return None
+
 # Create a Brand
 def create_brand(db: Session, brandDTO: BrandDTO):
     try:
+        #print(brandDTO.is_active)
         new_brand = Brand(
             name=brandDTO.name,
             logo=brandDTO.logo,
             desc=brandDTO.desc,
+            is_active=brandDTO.is_active,
             createDate=datetime.now(),
             updateDate=datetime.now()
         )
@@ -54,3 +64,11 @@ def delete_brand(db: Session, id: UUID):
     except Exception as e:
         logging.error('Error: ', e) 
     
+def update_brand(db: Session, brandDTO: BrandDTO):
+    try:
+        db.add(brandDTO)
+        db.commit()
+        return brandDTO
+    except Exception as e:
+        logging.error('Error: ', e)
+    return None

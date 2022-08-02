@@ -1,0 +1,51 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="logo">Logo</nz-form-label>
+        <img nz-image width="100px" height="100px" [src]="brand.logo" alt="" />
+        <nz-form-control [nzSpan]="14">
+            <div class="clearfix">
+                <nz-upload nzAction="http://127.0.0.1:8000/api/v1/brands/upload" nzListType="picture-card"
+                    [(nzFileList)]="fileList" [nzShowButton]="fileList.length < 1" [nzPreview]="handlePreview">
+                    <div>
+                        <i nz-icon nzType="plus"></i>
+                        <div style="margin-top: 8px">Upload</div>
+                    </div>
+                </nz-upload>
+                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                    (nzOnCancel)="previewVisible = false">
+                    <ng-template #modalContent>
+                        <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                    </ng-template>
+                </nz-modal>
+            </div>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+            <span>name</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your name!">
+            <input nz-input id="name" [ngModel]="brand.name" formControlName="name" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="name">Status</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <nz-select formControlName="is_active" ngModel={{brand.is_active}}>
+                <nz-option nzValue="true" nzLabel="Active"></nz-option>
+                <nz-option nzValue="false" nzLabel="Inactive"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="desc" nzRequired>Description</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <textarea rows="4" formControlName="desc" [ngModel]="brand.desc" nz-input></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    
+    <div class="center">
+        <button nz-button nzType="primary" type="button" (click)="submitForm()">Save Changes</button>
+    </div>
+</form>

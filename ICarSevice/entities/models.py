@@ -1,6 +1,5 @@
-from enum import unique
 import uuid
-from sqlalchemy import Column, Integer, String, Text, DateTime, LargeBinary
+from sqlalchemy import Boolean, Column, String, Text, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from db_config import Base
 
@@ -8,6 +7,7 @@ from db_config import Base
 class BaseAudit():
     name = Column(String(255), nullable=False, unique=True)
     desc = Column(Text)
+    is_active = Column(Boolean)
     createDate = Column(DateTime)
     updateDate = Column(DateTime)
 

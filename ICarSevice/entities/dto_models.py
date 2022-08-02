@@ -1,13 +1,14 @@
 from datetime import datetime
 from typing import List, Optional
 from uuid import UUID
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class BaseAudit(BaseModel):
     id: Optional[UUID]
     name: Optional[str] = None    
     desc: Optional[str] = None
+    is_active: Optional[bool]
     createDate: Optional[datetime] = None
     updateDate: Optional[datetime] = None
 
